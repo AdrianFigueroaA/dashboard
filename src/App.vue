@@ -6,10 +6,7 @@
 </template>
 
 <style lang="scss">
-#app {
 
-  background:#2ecc71 ;
-}
 </style>
 
 <script>

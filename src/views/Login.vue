@@ -3,7 +3,7 @@
  <div class="login">
      <h5 class="mx-auto">Ingresa tus Datos</h5>
     <a-input placeholder="Usuario" v-model="usuario" />
-    <a-input placeholder="Contraseña" v-model="contrasena" />
+    <a-input-password placeholder="Contraseña" v-model="contrasena" />
     <a-button  @click="login" type="primary" >Ingresar</a-button>
     </div>
   </div>

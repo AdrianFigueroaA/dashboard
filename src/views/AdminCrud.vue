@@ -1,95 +1,102 @@
 <template>
   <div class="Create_Users">
-<a-button class="buttonLogout" @click="logOut" variant="danger" >Cerrar Sesión</a-button>
+<h1>
+        Portal de Administracion de Usuarios
+      </h1>
+<div class="buttonLogout">
+  
+<a-button  @click="logOut" variant="danger" >Cerrar Sesión</a-button>
+</div>
+
+
 
  <a-table :columns="columns" :data-source="data">
     <a slot="name" slot-scope="text">{{ text }}</a>
-    <span slot="customTitle"><a-icon type="smile-o" /> Name</span>
-    <span slot="tags" slot-scope="tags">
-      <a-tag
-        v-for="tag in tags"
-        :key="tag"
-        :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-      >
-        {{ tag.toUpperCase() }}
+    <span slot="customTitle"><a-icon  /> Nombre</span>
+    <span slot="personal" slot-scope="personal">
+      <a-tag v-for="per in personal" :key="per">
+        {{ per.nombre }}
       </a-tag>
     </span>
-    <span slot="action" slot-scope="text, record">
-      <a>Invite 一 {{ record.name }}</a>
+    <span slot="action">
+      <a-button>Borrar</a-button>
       <a-divider type="vertical" />
-      <a>Delete</a>
-      <a-divider type="vertical" />
-      <a class="ant-dropdown-link"> More actions <a-icon type="down" /> </a>
+      <EditarUser />
     </span>
   </a-table>
   
+        <div class="Agregar">
+        <AgregarUser />
+        </div>
+
+        <div class="link-id">
+                <a href="https://github.com/AdrianFigueroaA">
+                  Desarrollado  por <span>Adrian Figueroa.</span></a>
+              </div>
+    
   </div>
 </template>
 
 <script>
-const columns = [
-  {
-    dataIndex: 'name',
-    key: 'name',
-    slots: { title: 'customTitle' },
-    scopedSlots: { customRender: 'name' },
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-    scopedSlots: { customRender: 'tags' },
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    scopedSlots: { customRender: 'action' },
-  },
-];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
 import firebase from "firebase";
+import AgregarUser from '../components/AgregarUser.vue';
+import EditarUser from '../components/EditarUser.vue';
+import { mapActions, mapState } from "vuex";
 export default {
-  data() {
+  name:"AdminCrud",
+  components: { 
+    AgregarUser ,
+    EditarUser
+  },
+   data() {
     return {
-      data,
-      columns,
+      data:[
+{
+          nombre: "adrian",
+          direccion: "sdwegh",
+          edad:"31",
+      },
+
+      ] ,
+      columns: [
+          {
+            dataIndex: 'nombre',
+            key: 'nombre',
+            slots: { title: 'customTitle' },
+            scopedSlots: { customRender: 'name' },
+          },
+          {
+            title: 'Edad',
+            dataIndex: 'edad',
+            key: 'edad',
+          },
+          {
+            title: 'Direccion',
+            dataIndex: 'direccion',
+            key: 'direccion',
+          },
+          
+          {
+            title: 'Acciones',
+            key: 'action',
+            scopedSlots: { customRender: 'action' },
+          },
+        ]
     };
   },
 
+  computed: {
+    ...mapState(["Usuarios"]),
+  },
+ 
   methods : {
+ ...mapActions(["borrarUser"]),
+
+    borrar(id) {
+      this.borrarDino(id);
+    },
+
 
   logOut() {
       firebase
@@ -109,9 +116,37 @@ export default {
 
 <style lang="scss">
 
-
-.buttonLogout {
-
-  text-align: right;
+.Agregar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+.buttonLogout {
+ 
+  height: 45px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-right: 15px;
+
+ 
+}
+
+.link-id {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+      a {
+          color: black ;
+          span {    
+
+            color: #099745;
+          }
+      } 
+
+    
+}
+
+
 </style>
