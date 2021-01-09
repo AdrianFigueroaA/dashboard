@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-   <a-collapse >
-      <a-collapse-panel  header="Dashboard">
-        <a-button type="primary" @click="showModal">
+  
+  
+<div class="buttonLogin" >
+
+  <h1>Dashboard</h1>
+  <a-button type="primary" @click="showModal">
       Login
     </a-button>
-      </a-collapse-panel>
-    </a-collapse>
-  
-
+</div>
   
     <a-modal v-model="visible" title="Login Administrador" on-ok="handleOk">
       <template slot="footer">
-        <a-button key="register" @click="createUser() ">
+        <a-button key="register"  v-if="!showSuccessMessage"  @click="createUser() ">
           Registrar 
         </a-button>
         <a-button key="submit" type="primary"  @click="login">
@@ -24,7 +24,7 @@
     <a-input placeholder="Correo" v-model="email" />
      <a-input-password placeholder="Contraseña" v-model="password" />
      
-  <a-alert  v-if="showSuccessMessage" message="felicitaciones cuenta creada" type="info" />
+  <a-alert  v-if="showSuccessMessage" message="Cuenta Creada Presione Ingresar" type="info" />
 
 
  
@@ -200,6 +200,17 @@ showModal() {
   display: flex;
 }
 
+.buttonLogin {
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 15px;
+}
+h1 {
+
+        margin-left: 20px;
+      }
 .graficos {
   margin-top: 20px;
   height: 340px;
