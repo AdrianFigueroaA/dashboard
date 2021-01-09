@@ -12,13 +12,9 @@ const routes = [
     component: Home,
     alias: ["/inicio", "/home", "/portada", "/"],
   },
- 
   {
     path: '/admincrud',
     name: 'AdminCrud',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "admincrud" */ '../views/AdminCrud.vue'),
     alias: ["/administrador", "/crud", "/admin"],
     meta: {
@@ -28,9 +24,6 @@ const routes = [
   {
     path: "*",
     name: 'NotFound',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "NotFound" */ '../views/NotFound.vue'),
   }
 ]

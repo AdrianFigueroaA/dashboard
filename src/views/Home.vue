@@ -1,118 +1,104 @@
 <template>
   <div class="home">
-  
-  
-<div class="buttonLogin" >
+    <div class="buttonLogin">
+      <h1>Dashboard</h1>
+      <a-button type="primary" @click="showModal">
+        Login
+      </a-button>
+    </div>
 
-  <h1>Dashboard</h1>
-  <a-button type="primary" @click="showModal">
-      Login
-    </a-button>
-</div>
-  
-    <a-modal v-model="visible" title="Login Administrador" on-ok="handleOk">
+    <a-modal v-model="visible" title="Ingresa tus Datos">
       <template slot="footer">
-        <a-button key="register"  v-if="!showSuccessMessage"  @click="createUser() ">
-          Registrar 
+        <a-button
+          key="register"
+          v-if="!showSuccessMessage"
+          @click="createUser()"
+        >
+          Registrar
         </a-button>
-        <a-button key="submit" type="primary"  @click="login">
+        <a-button key="submit" type="primary" @click="login">
           Ingresar
         </a-button>
       </template>
       <div class="login">
-     <h3 class="mx-auto"  >Ingresa tus Datos</h3>
-    <a-input placeholder="Correo" v-model="email" />
-     <a-input-password placeholder="Contraseña" v-model="password" />
-     
-  <a-alert  v-if="showSuccessMessage" message="Cuenta Creada Presione Ingresar" type="info" />
 
+        <a-input placeholder="Correo" v-model="email" />
+        <a-input-password placeholder="Contraseña" v-model="password" />
 
- 
-    </div>
-     
+        <a-alert
+          v-if="showSuccessMessage"
+          message="Cuenta Creada Presione Ingresar"
+          type="info"
+        />
+      </div>
     </a-modal>
 
-   <div class="container">
-      <div class="cards" >
-
-          <a-row type="flex" justify="center" gutter={16} >
-                      <a-col :span="6" v-for="(dum, i) in dataDum" :key="i">
-                          <a-card hoverable style="width: 240px">
-                            <img
-                            class="a-img"
-                              slot="cover"
-                              alt="example"
-                              :src="dum.image"
-                              size="small"
-                              
-                            />
-                            <a-card-meta :title="dum.text">
-                              <template slot="description">
-                            
-                              <p>likes {{dum.likes}}</p>
-                              </template>
-                            </a-card-meta>
-                          </a-card>
-                      </a-col>
-                </a-row>
-     </div>
-<div class="graficos" >
-
-<div id="piechart"  >
+    <div class="container">
+      <div class="cards">
+        <a-row :gutter="10" type="flex" justify="center" >
+          <a-col :span="8" v-for="(dum, i) in dataDum" :key="i">
+            <a-card hoverable style="width: 240px">
+              <img
+                class="a-img"
+                slot="cover"
+                alt="example"
+                :src="dum.image"
+                size="small"
+              />
+              <a-card-meta :title="dum.text">
+                <template slot="description">
+                  <p>Fecha publicacion {{ dum.publishDate }}</p>
+                  <p>likes {{ dum.likes }}</p>
 
 
-
-
-
-</div>
-
-</div>
+                </template>
+              </a-card-meta>
+            </a-card>
+          </a-col>
+        </a-row>
       </div>
-      
+      <div class="graficos">
+        <div id="piechart"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 import firebase from "firebase";
 export default {
-  name: 'Home',
+  name: "Home",
 
   data() {
-  
     return {
-        dataDum :[],
-        visible: false,
-        showSuccessMessage: false,
-        email: "",
-        password: "",
-    }
-
-    
+      dataDum: [],
+      originalData:[],
+      visible: false,
+      showSuccessMessage: false,
+      email: "",
+      password: "",
+    };
   },
   methods: {
-
-login() {
+    login() {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(
           (user) => {
             this.$router.push("AdminCrud");
-
           },
           (error) => console.error(error)
         );
     },
 
-
-createUser() {
+    createUser() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((user) => {
-          
-          this.showSuccessMessage = true
+          this.showSuccessMessage = true;
         })
         .catch((error) => {
           var errorCode = error.code;
@@ -121,82 +107,62 @@ createUser() {
         });
     },
 
+    async getDataDogs() {
+      const APP_ID = "5ff76c95952b26f8147db9f6";
+      const baseUrl = "https://dummyapi.io/data/api";
 
-    async  getDataDogs() {
-
-      const APP_ID = '5ff76c95952b26f8147db9f6';
-      const baseUrl = "https://dummyapi.io/data/api"
-      // Make a request for a user with a given ID
-      await axios.get(`${baseUrl}/post?limit=10`, { headers: { 'app-id': APP_ID } })
+      await axios
+        .get(`${baseUrl}/post?limit=10`, { headers: { "app-id": APP_ID } })
         .then((response) => {
-          // handle success
           this.dataDum = response.data.data.splice(7);
- 
+          this.originalData = response.data.data;
+          console.log( response.data.data)
         })
-        .catch(function (error) {
-         
+        .catch(function(error) {
           console.log(error);
         })
-        .then(function () {
-        });
- 
-    } ,
+    },
 
-showModal() {
+    showModal() {
       this.visible = true;
-      this.showSuccessMessage = false
-    },
-    handleOk(e) {
-      console.log(e);
-      this.visible = false;
-      
-    },
-    handleCancel(e) {
-      this.visible = false;
-      
+      this.showSuccessMessage = false;
     },
 
-    
-    
   },
 
   created() {
-            this.getDataDogs();
-            google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+    this.getDataDogs();
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ["Task", "Hours per Day"],
+        ["likes", 11],
+        ["raza", 2],
 
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
+      ]);
 
-        var options = {
-          title: 'Resumen Canino',
-          'width':500,
-          'height':350,
-          'border-radius':25,
-        };
+      var options = {
+        title: "Resumen Canino",
+        width: 500,
+        height: 350,
+      };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+      var chart = new google.visualization.PieChart(
+        document.getElementById("piechart")
+      );
 
-        chart.draw(data, options);
-      }
-      },
-
-}
+      chart.draw(data, options);
+    }
+  },
+};
 </script>
 
-
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
 .container {
-
   display: flex;
 }
 
@@ -205,65 +171,46 @@ showModal() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 15px;
+  padding-right: 15px;
+  background: #34495e;
+  border-bottom: 2px solid black;
 }
 h1 {
-
-        margin-left: 20px;
-      }
+  margin-left: 20px;
+  font-family: "Roboto", sans-serif;
+}
 .graficos {
   margin-top: 20px;
-  height: 340px;
   width: 490px;
-  background: red;
-  border: 0.5px red;;
-  border-radius: 25px;
+  padding: 10px;
 }
 
 .a-img {
-
   height: 200px;
-}
-.login {
-
-    width: 400px;
-    margin: auto;
-
-}
-
-.home {
-
-background:#2ecc71 ;
-
 }
 
 .ant-modal-header {
-
   text-align: center;
 }
 
-h1, h3 {
-
+h1,
+h3 {
   text-align: center;
 }
 
 .cards {
-
-  border: 0.5px  #3498db solid;
-  width: 700px;
+  width: 800px;
   border-radius: 25px;
-  height: 350px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   background: #3498db;
-  margin: 20px;
+  margin: 20px 0 0 10px;
+  padding: 20px 0;
+  
 }
 
 .ant-input {
-
-margin-bottom: 10px !important;
-margin-top: 10px !important;
-
+   margin: 10px 0 !important;
 }
 </style>
