@@ -9,23 +9,24 @@
     </a-collapse>
   
 
-    
-
-
-
+  
     <a-modal v-model="visible" title="Login Administrador" on-ok="handleOk">
       <template slot="footer">
-        <a-button key="back" @click="handleCancel">
-          Cancelar
+        <a-button key="register" @click="createUser() ">
+          Registrar 
         </a-button>
-        <a-button key="submit" type="primary" :loading="loading" @click="login">
+        <a-button key="submit" type="primary"  @click="login">
           Ingresar
         </a-button>
       </template>
       <div class="login">
      <h3 class="mx-auto"  >Ingresa tus Datos</h3>
-    <a-input placeholder="Usuario" v-model="usuario" />
-    <a-input placeholder="Contraseña" v-model="contrasena" />
+    <a-input placeholder="Correo" v-model="email" />
+     <a-input-password placeholder="Contraseña" v-model="password" />
+     
+  <a-alert  v-if="showSuccessMessage" message="felicitaciones cuenta creada" type="info" />
+
+
  
     </div>
      
@@ -54,10 +55,6 @@
                           </a-card>
                       </a-col>
                 </a-row>
-
-
-                
-
      </div>
 <div class="graficos" >
 
@@ -86,8 +83,9 @@ export default {
     return {
         dataDum :[],
         visible: false,
-        usuario: "",
-      contrasena: "",
+        showSuccessMessage: false,
+        email: "",
+        password: "",
     }
 
     
@@ -97,16 +95,34 @@ export default {
 login() {
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.usuario, this.contrasena)
+        .signInWithEmailAndPassword(this.email, this.password)
         .then(
           (user) => {
             this.$router.push("AdminCrud");
+
           },
           (error) => console.error(error)
         );
     },
 
-    async  getData() {
+
+createUser() {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((user) => {
+          
+          this.showSuccessMessage = true
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ..
+        });
+    },
+
+
+    async  getDataDogs() {
 
       const APP_ID = '5ff76c95952b26f8147db9f6';
       const baseUrl = "https://dummyapi.io/data/api"
@@ -115,35 +131,37 @@ login() {
         .then((response) => {
           // handle success
           this.dataDum = response.data.data.splice(7);
-        
-         console.log(response.data.data)
  
         })
         .catch(function (error) {
-          // handle error
+         
           console.log(error);
         })
         .then(function () {
-          // always executed
         });
  
     } ,
 
 showModal() {
       this.visible = true;
+      this.showSuccessMessage = false
     },
     handleOk(e) {
       console.log(e);
       this.visible = false;
+      
     },
     handleCancel(e) {
       this.visible = false;
+      
     },
+
+    
     
   },
 
   created() {
-            this.getData();
+            this.getDataDogs();
             google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 

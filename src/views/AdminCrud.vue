@@ -8,8 +8,6 @@
 <a-button  @click="logOut" variant="danger" >Cerrar Sesión</a-button>
 </div>
 
-
-
  <a-table :columns="columns" :data-source="data">
     <a slot="name" slot-scope="text">{{ text }}</a>
     <span slot="customTitle"><a-icon  /> Nombre</span>
@@ -29,7 +27,7 @@
         <AgregarUser />
         </div>
 
-        <div class="link-id">
+              <div class="link-id">
                 <a href="https://github.com/AdrianFigueroaA">
                   Desarrollado  por <span>Adrian Figueroa.</span></a>
               </div>
@@ -53,7 +51,7 @@ export default {
     return {
       data:[
 {
-          nombre: "adrian",
+          nombre:"nombre",
           direccion: "sdwegh",
           edad:"31",
       },
@@ -87,16 +85,20 @@ export default {
   },
 
   computed: {
+
     ...mapState(["Usuarios"]),
   },
- 
+
+  created() {
+    this.getData();
+  },
+
   methods : {
- ...mapActions(["borrarUser"]),
+ ...mapActions(["borrarUser"], ["getData"]),
 
     borrar(id) {
-      this.borrarDino(id);
+      this.borrarUsuario(id);
     },
-
 
   logOut() {
       firebase
@@ -110,7 +112,8 @@ export default {
         });
     },
 
-  }
+  },
+ 
 };
 </script>
 
@@ -122,14 +125,11 @@ export default {
   align-items: center;
 }
 .buttonLogout {
- 
   height: 45px;
   display: flex;
   justify-content: end;
   align-items: center;
   margin-right: 15px;
-
- 
 }
 
 .link-id {

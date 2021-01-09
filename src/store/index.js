@@ -28,11 +28,14 @@ export default {
   },
   actions: {
     async getData({ commit }) {
+      console.log("indexgetdata")
       await firebase
         .firestore()
         .collection("usuarios")
         .onSnapshot((snapshot) => {
+          console.log(snapshot);
           let listadoUsuarios = [];
+
           snapshot.forEach((p) => {
             listadoUsuarios.push({
               id: p.id,
@@ -43,13 +46,15 @@ export default {
           });
           commit("setData", listadoUsuarios);
         });
+        
     },
      addData({ commit }, payload) {
       const User = {
         
         nombre: payload.nombre.toLowerCase(),
-        edad: payload.alimentacion,
-        direccion: payload.tipo.toLowerCase(),
+        edad: payload.edad,
+        direccion: payload.direccion.toLowerCase(),
+        
       
       };
 
@@ -57,13 +62,13 @@ export default {
          firebase
           .firestore()
           .collection("usuarios")
-          .add(user);
+          .add(User);
       } catch (error) {
         console.error("Hay un error en la carga del usuario:", error);
       }
     },
 
-    borrarUser({ commit }, id) {
+    borrarUsuario({ commit }, id) {
       try {
         firebase
           .firestore()
@@ -75,7 +80,7 @@ export default {
       }
     },
 
-    editUser({ commit }, dino) {
+    editUser({ commit }, user) {
       try {
         firebase
           .firestore()
