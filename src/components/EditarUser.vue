@@ -8,13 +8,13 @@
         <a-button key="back" @click="handleCancel">
           Cancelar
         </a-button>
-        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">
+        <a-button key="submit" type="primary" :loading="loading" @click="EditarUsuario(user)">
           Modificar
         </a-button>
       </template>
-        <a-input   v-model="usuarioEditado.nombre"  placeholder="Nombre" />
-        <a-input placeholder="Edad" />
-        <a-input placeholder="Direccion" />
+        <a-input  v-model="user.nombre"  placeholder="Nombre" />
+        <a-input  v-model="user.edad" placeholder="Edad" />
+        <a-input  v-model="user.direccion" placeholder="Direccion" />
      
     </a-modal>
   </div>
@@ -40,6 +40,10 @@ usuarioEditado: {
     };
   },
 
+ props: {
+    user: Object,
+  },
+
  computed: {
     ...mapState(["Usuarios"]),
   
@@ -49,18 +53,20 @@ usuarioEditado: {
 
       ...mapActions(["editUser"], ["getData"]),
 
-      EditarUsuario() {
-      this.editUser(this.Usuarios);
-      console.log("editando",this.Usuario);
+      EditarUsuario(user) {
+      this.editUser(user);
+      showModal() 
+      console.log("editando",this.Usuarios);
     },
 
 
-   editar() {
-      this.usuarioEditado.id = especie.id;
-      this.usuarioEditado.data.tipo = especie.tipo;
-      this.usuarioEditado.data.nombre = nuevo.nombre;
+  //  editar() {
+  //     this.usuarioEditado.id = usuario.id;
+  //     this.usuarioEditado.data.tipo = usuario.edad;
+  //     this.usuarioEditado.data.nombre = usuario.nombre;
+  //     this.usuarioEditado.data.direccion = usuario.direccion;
     
-    },
+  //   },
 
 
     showModal() {

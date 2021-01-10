@@ -88,7 +88,7 @@ export default new Vuex.Store({
           .firestore()
           .collection("usuarios")
           .doc(user.id)
-          .update(user.data);
+          .update(user);
       } catch (error) {
         console.error("hay un error en la edicion del usuario:", error);
       }

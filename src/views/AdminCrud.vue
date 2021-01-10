@@ -10,10 +10,10 @@
   <a-table :columns="columns" :data-source="Usuarios">
   
     <a ></a>
-    <div slot="action" slot-scope="text, record" > 
-       <EditarUser />
-       <a-button   >Borrar</a-button>
-       <a v-on:click.stop.prevent="borrar(record.id)">asd</a>
+    <div slot="action" slot-scope="text, user" > 
+       <EditarUser :user="user" />
+       <a-button  v-on:click.stop.prevent="borrar(user.id)"  >Borrar</a-button>
+
        
     </div>
     
@@ -92,7 +92,7 @@ this.Usuarios.map(x =>{
     borrar: function(id) {
 
       this.borrarUsuario(id);
-      console.log(id)
+      
     },
 
     logOut() {
