@@ -35,6 +35,11 @@ _El autor de este proyecto es:_
 yarn install
 ```
 
+## Instalar firebase
+```
+npm install --save firebase
+```
+
 ## Instalar Ant Design Vue
 ```
 yarn add antd
