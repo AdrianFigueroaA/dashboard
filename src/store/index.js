@@ -4,8 +4,8 @@ import firebase from "firebase";
 
 Vue.use(Vuex)
 
-export default {
-  namespaced: true,
+export default new Vuex.Store({
+  
   state: {
     Usuarios: [],
     add: false,
@@ -16,8 +16,16 @@ export default {
     },
   },
   mutations: {
-    setData(state, payload) {
-      state.Usuarios = payload;
+    SET_DATA(state, payload) {
+      let newList = [];
+      payload.forEach((user) => {
+        user.data['id'] = user.id
+        newList.push(
+          user.data
+        );
+        // console.log(newList)
+      });
+      state.Usuarios = newList;
     },
     AddData(state, payload) {
       state.Usuarios.push(payload);
@@ -28,23 +36,19 @@ export default {
   },
   actions: {
     async getData({ commit }) {
-      console.log("indexgetdata")
       await firebase
         .firestore()
         .collection("usuarios")
         .onSnapshot((snapshot) => {
           console.log(snapshot);
           let listadoUsuarios = [];
-
           snapshot.forEach((p) => {
             listadoUsuarios.push({
               id: p.id,
-              nombre: p.data().nombre,
-              edad: p.data().edad,
-              direccion:p.data().direccion
+              data: p.data(),
             });
           });
-          commit("setData", listadoUsuarios);
+          commit("SET_DATA", listadoUsuarios);
         });
         
     },
@@ -92,4 +96,4 @@ export default {
       }
     },
   },
-};
+});

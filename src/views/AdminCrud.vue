@@ -1,32 +1,40 @@
 <template>
   <div class="Create_Users">
     <div class="nav">
-<h1>
-      Portal de Administracion de Usuarios
-    </h1>
-    <div class="buttonLogout">
-      <a-button @click="logOut" variant="danger">Cerrar Sesión</a-button>
+      <h1>Portal de Administracion de Usuarios</h1>
+      <div class="buttonLogout">
+        <a-button @click="logOut" variant="danger">Cerrar Sesión</a-button>
+      </div>
     </div>
 
-    </div>
+
+
+
+
+
+
+
+
+
+  <a-table :columns="columns" :data-source="Usuarios">
+    <!-- <a slot="name" >{{usuario.data.nombre}}</a> -->
+    <!-- <a > <EditarUser /></a> -->
+    <!-- <template
+      v-for="col in ['nombre', 'edad', 'direccion']"
+      :slot="col"
+    >
+      <div :key="col.data">
+      col.data.nombre
+       
+      </div>
+    </template> -->
     
-    <a-table :columns="columns" :data-source="data">
-      <a slot="name" slot-scope="text">{{ text }}</a>
-      <span slot="customTitle"><a-icon /> Nombre</span>
-      <span slot="personal" slot-scope="personal">
-        <a-tag v-for="per in personal" :key="per">
-          {{ per.nombre }}
-        </a-tag>
-      </span>
-      <span slot="action">
-        <a-button>Borrar</a-button>
-        <a-divider type="vertical" />
-        <EditarUser />
-      </span>
-    </a-table>
+  </a-table>
+
 
     <div class="Agregar">
       <AgregarUser />
+      
     </div>
   </div>
 </template>
@@ -45,18 +53,16 @@ export default {
   data() {
     return {
       data: [
-        {
-          nombre: "nombre",
-          direccion: "sdwegh",
-          edad: "31",
-        },
+
       ],
+  newUsuarios: [],
       columns: [
         {
+          title:"nombre",
           dataIndex: "nombre",
           key: "nombre",
-          slots: { title: "customTitle" },
-          scopedSlots: { customRender: "name" },
+          slots: { title: "nombre" },
+          scopedSlots: { customRender: "nombre" },
         },
         {
           title: "Edad",
@@ -68,11 +74,11 @@ export default {
           dataIndex: "direccion",
           key: "direccion",
         },
-
         {
           title: "Acciones",
           key: "action",
-          scopedSlots: { customRender: "action" },
+          
+          // scopedSlots: { customRender: "action" },
         },
       ],
     };
@@ -80,12 +86,24 @@ export default {
 
   computed: {
     ...mapState(["Usuarios"]),
+  
+  
   },
 
-  created() {
-    this.getData();
-  },
+ created() {
 
+
+    console.log(this.Usuarios)
+ },
+
+
+update() {
+this.Usuarios.map(x =>{
+
+       this.newUsuarios.push(x.data)
+     })
+
+},
   methods: {
     ...mapActions(["borrarUser"], ["getData"]),
 
@@ -109,13 +127,18 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
 .Agregar {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .nav {
-   background: #34495e;
+  background: #34495e;
+}
+h1 {
+  font-family: "Roboto", sans-serif;
 }
 .buttonLogout {
   height: 45px;
@@ -124,6 +147,6 @@ export default {
   align-items: center;
   padding-right: 15px;
   background: #34495e;
-  border-bottom:2px solid black
+  border-bottom: 2px solid black;
 }
 </style>
