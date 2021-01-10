@@ -50,8 +50,7 @@ export default {
 
     AgregarUsuario() {
       this.handleOk()
-      this.addData(this.Usuarios);
-      
+      this.addData(this.usuario);
       console.log("usuario agregado")
     },
     ClearData() {
@@ -69,7 +68,7 @@ showModal() {
       setTimeout(() => {
         this.visible = false;
         this.loading = false;
-      }, 1000);
+      }, 2000);
     },
     handleCancel(e) {
       this.visible = false;

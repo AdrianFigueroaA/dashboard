@@ -9,7 +9,7 @@
           Cancelar
         </a-button>
         <a-button key="submit" type="primary" :loading="loading" @click="EditarUsuario(user)">
-          Modificar
+          Modificar 
         </a-button>
       </template>
         <a-input  v-model="user.nombre"  placeholder="Nombre" />
@@ -27,14 +27,6 @@ export default {
     name:"EditarUser",
   data() {
     return {
-
-usuarioEditado: {
-        nombre:"",
-        edad:"",
-        direccion:"",
-
-},
-
       loading: false,
       visible: false,
     };
@@ -46,7 +38,6 @@ usuarioEditado: {
 
  computed: {
     ...mapState(["Usuarios"]),
-  
   },
 
   methods: {
@@ -54,20 +45,11 @@ usuarioEditado: {
       ...mapActions(["editUser"], ["getData"]),
 
       EditarUsuario(user) {
-      this.editUser(user);
-      showModal() 
-      console.log("editando",this.Usuarios);
+        this.handleOk()
+        this.editUser(user);
+      
+      
     },
-
-
-  //  editar() {
-  //     this.usuarioEditado.id = usuario.id;
-  //     this.usuarioEditado.data.tipo = usuario.edad;
-  //     this.usuarioEditado.data.nombre = usuario.nombre;
-  //     this.usuarioEditado.data.direccion = usuario.direccion;
-    
-  //   },
-
 
     showModal() {
       this.visible = true;
@@ -77,7 +59,7 @@ usuarioEditado: {
       setTimeout(() => {
         this.visible = false;
         this.loading = false;
-      }, 3000);
+      }, 2000);
     },
     handleCancel(e) {
       this.visible = false;
