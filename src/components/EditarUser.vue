@@ -8,18 +8,20 @@
         <a-button key="back" @click="handleCancel">
           Cancelar
         </a-button>
-        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">
-          Modificar
+        <a-button key="submit" type="primary" :loading="loading" @click="EditarUsuario(user)">
+          Modificar 
         </a-button>
       </template>
-        <a-input placeholder="Nombre" />
-        <a-input placeholder="Edad" />
-        <a-input placeholder="Direccion" />
+        <a-input  v-model="user.nombre"  placeholder="Nombre" />
+        <a-input  v-model="user.edad" placeholder="Edad" />
+        <a-input  v-model="user.direccion" placeholder="Direccion" />
      
     </a-modal>
   </div>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
+import firebase from "firebase";
 export default {
 
     name:"EditarUser",
@@ -29,7 +31,26 @@ export default {
       visible: false,
     };
   },
+
+ props: {
+    user: Object,
+  },
+
+ computed: {
+    ...mapState(["Usuarios"]),
+  },
+
   methods: {
+
+      ...mapActions(["editUser"], ["getData"]),
+
+      EditarUsuario(user) {
+        this.handleOk()
+        this.editUser(user);
+      
+      
+    },
+
     showModal() {
       this.visible = true;
     },
@@ -38,7 +59,7 @@ export default {
       setTimeout(() => {
         this.visible = false;
         this.loading = false;
-      }, 3000);
+      }, 2000);
     },
     handleCancel(e) {
       this.visible = false;

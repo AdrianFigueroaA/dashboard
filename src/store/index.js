@@ -4,8 +4,8 @@ import firebase from "firebase";
 
 Vue.use(Vuex)
 
-export default {
-  namespaced: true,
+export default new Vuex.Store({
+  
   state: {
     Usuarios: [],
     add: false,
@@ -16,8 +16,16 @@ export default {
     },
   },
   mutations: {
-    setData(state, payload) {
-      state.Usuarios = payload;
+    SET_DATA(state, payload) {
+      let newList = [];
+      payload.forEach((user) => {
+        user.data['id'] = user.id
+        newList.push(
+          user.data
+        );
+        
+      });
+      state.Usuarios = newList;
     },
     AddData(state, payload) {
       state.Usuarios.push(payload);
@@ -36,38 +44,37 @@ export default {
           snapshot.forEach((p) => {
             listadoUsuarios.push({
               id: p.id,
-              nombre: p.data().nombre,
-              edad: p.data().edad,
-              direccion:p.data().direccion
+              data: p.data(),
             });
           });
-          commit("setData", listadoUsuarios);
+          commit("SET_DATA", listadoUsuarios);
         });
+        
     },
      addData({ commit }, payload) {
       const User = {
         
         nombre: payload.nombre.toLowerCase(),
-        edad: payload.alimentacion,
-        direccion: payload.tipo.toLowerCase(),
-      
+        edad: payload.edad,
+        direccion: payload.direccion.toLowerCase(),
       };
 
       try {
          firebase
           .firestore()
           .collection("usuarios")
-          .add(user);
+          .add(User);
       } catch (error) {
         console.error("Hay un error en la carga del usuario:", error);
       }
     },
 
-    borrarUser({ commit }, id) {
+    borrarUsuario({ commit }, id) {
+      console.log("index.js", id)
       try {
         firebase
           .firestore()
-          .collection("usuario")
+          .collection("usuarios")
           .doc(id)
           .delete();
       } catch (error) {
@@ -75,16 +82,16 @@ export default {
       }
     },
 
-    editUser({ commit }, dino) {
+    editUser({ commit }, user) {
       try {
         firebase
           .firestore()
-          .collection("usuario")
+          .collection("usuarios")
           .doc(user.id)
-          .update(user.data);
+          .update(user);
       } catch (error) {
         console.error("hay un error en la edicion del usuario:", error);
       }
     },
   },
-};
+});

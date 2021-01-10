@@ -9,25 +9,22 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    alias: ["/inicio", "/home", "/portada", "/"],
   },
- 
-  {
-    path: '/login',
-    name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
-  },
- 
   {
     path: '/admincrud',
     name: 'AdminCrud',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "admincrud" */ '../views/AdminCrud.vue')
+    component: () => import(/* webpackChunkName: "admincrud" */ '../views/AdminCrud.vue'),
+    alias: ["/administrador", "/crud", "/admin"],
+    meta: {
+      autentificado: true,
+   },
+  },
+  {
+    path: "*",
+    name: 'NotFound',
+    component: () => import(/* webpackChunkName: "NotFound" */ '../views/NotFound.vue'),
   }
 ]
 
@@ -45,9 +42,9 @@ router.beforeEach((to, from, next) => {
   if (!autorizacion && usuario) {
     next();
   } else if (autorizacion && !usuario) {
-    next("login");
+    next("AdminCrud");
   } else {
-  
+
    }
    next();
 });
