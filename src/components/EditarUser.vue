@@ -12,7 +12,7 @@
           Modificar
         </a-button>
       </template>
-        <a-input placeholder="Nombre" />
+        <a-input   v-model="usuarioEditado.nombre"  placeholder="Nombre" />
         <a-input placeholder="Edad" />
         <a-input placeholder="Direccion" />
      
@@ -20,16 +20,49 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
+import firebase from "firebase";
 export default {
 
     name:"EditarUser",
   data() {
     return {
+
+usuarioEditado: {
+        nombre:"",
+        edad:"",
+        direccion:"",
+
+},
+
       loading: false,
       visible: false,
     };
   },
+
+ computed: {
+    ...mapState(["Usuarios"]),
+  
+  },
+
   methods: {
+
+      ...mapActions(["editUser"], ["getData"]),
+
+      EditarUsuario() {
+      this.editUser(this.Usuarios);
+      console.log("editando",this.Usuario);
+    },
+
+
+   editar() {
+      this.usuarioEditado.id = especie.id;
+      this.usuarioEditado.data.tipo = especie.tipo;
+      this.usuarioEditado.data.nombre = nuevo.nombre;
+    
+    },
+
+
     showModal() {
       this.visible = true;
     },

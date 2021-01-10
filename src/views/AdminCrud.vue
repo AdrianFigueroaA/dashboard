@@ -7,27 +7,15 @@
       </div>
     </div>
 
-
-
-
-
-
-
-
-
-
   <a-table :columns="columns" :data-source="Usuarios">
-    <!-- <a slot="name" >{{usuario.data.nombre}}</a> -->
-    <!-- <a > <EditarUser /></a> -->
-    <!-- <template
-      v-for="col in ['nombre', 'edad', 'direccion']"
-      :slot="col"
-    >
-      <div :key="col.data">
-      col.data.nombre
+  
+    <a ></a>
+    <div slot="action" slot-scope="text, record" > 
+       <EditarUser />
+       <a-button   >Borrar</a-button>
+       <a v-on:click.stop.prevent="borrar(record.id)">asd</a>
        
-      </div>
-    </template> -->
+    </div>
     
   </a-table>
 
@@ -76,9 +64,10 @@ export default {
         },
         {
           title: "Acciones",
-          key: "action",
+          dataIndex: "id",
+          key: "id",
           
-          // scopedSlots: { customRender: "action" },
+          scopedSlots: { customRender: "action" },
         },
       ],
     };
@@ -87,14 +76,7 @@ export default {
   computed: {
     ...mapState(["Usuarios"]),
   
-  
   },
-
- created() {
-
-
-    console.log(this.Usuarios)
- },
 
 
 update() {
@@ -105,10 +87,12 @@ this.Usuarios.map(x =>{
 
 },
   methods: {
-    ...mapActions(["borrarUser"], ["getData"]),
+    ...mapActions(["borrarUsuario"], ["getData"]),
 
-    borrar(id) {
+    borrar: function(id) {
+
       this.borrarUsuario(id);
+      console.log(id)
     },
 
     logOut() {

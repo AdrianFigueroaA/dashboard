@@ -8,28 +8,60 @@
         <a-button key="back" @click="handleCancel">
           Cancelar
         </a-button>
-        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loading"
+         
+
+          @click="AgregarUsuario"
+        >
           Crear
         </a-button>
       </template>
-        <a-input placeholder="Nombre" />
-        <a-input placeholder="Edad" />
-        <a-input placeholder="Direccion" />
-     
+      <a-input v-model="usuario.nombre" placeholder="Nombre" />
+      <a-input v-model="usuario.edad" placeholder="Edad" />
+      <a-input v-model="usuario.direccion" placeholder="Direccion" />
     </a-modal>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import firebase from "firebase";
 export default {
     name:"AgregarUser",
   data() {
     return {
+
+    usuario: {
+          nombre:"",
+          edad:"",
+          direccion:""
+    },
+
       loading: false,
       visible: false,
     };
   },
   methods: {
-    showModal() {
+
+
+...mapActions(["addData"]),
+
+    AgregarUsuario() {
+      this.handleOk()
+      this.addData(this.Usuarios);
+      
+      console.log("usuario agregado")
+    },
+    ClearData() {
+      this.usuario.nombre = "";
+      this.usuario.edad = "";
+      this.usuario = "";
+    },
+
+
+showModal() {
       this.visible = true;
     },
     handleOk(e) {
@@ -37,11 +69,17 @@ export default {
       setTimeout(() => {
         this.visible = false;
         this.loading = false;
-      }, 3000);
+      }, 1000);
     },
     handleCancel(e) {
       this.visible = false;
     },
+
   },
-};
+
+    
+  }
+
 </script>
+
+

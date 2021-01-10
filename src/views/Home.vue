@@ -116,7 +116,6 @@ export default {
         .then((response) => {
           this.dataDum = response.data.data.splice(7);
           this.originalData = response.data.data;
-          console.log( response.data.data)
         })
         .catch(function(error) {
           console.log(error);

@@ -23,7 +23,7 @@ export default new Vuex.Store({
         newList.push(
           user.data
         );
-        // console.log(newList)
+        
       });
       state.Usuarios = newList;
     },
@@ -40,7 +40,6 @@ export default new Vuex.Store({
         .firestore()
         .collection("usuarios")
         .onSnapshot((snapshot) => {
-          console.log(snapshot);
           let listadoUsuarios = [];
           snapshot.forEach((p) => {
             listadoUsuarios.push({
@@ -58,8 +57,6 @@ export default new Vuex.Store({
         nombre: payload.nombre.toLowerCase(),
         edad: payload.edad,
         direccion: payload.direccion.toLowerCase(),
-        
-      
       };
 
       try {
@@ -73,10 +70,11 @@ export default new Vuex.Store({
     },
 
     borrarUsuario({ commit }, id) {
+      console.log("index.js", id)
       try {
         firebase
           .firestore()
-          .collection("usuario")
+          .collection("usuarios")
           .doc(id)
           .delete();
       } catch (error) {
@@ -88,7 +86,7 @@ export default new Vuex.Store({
       try {
         firebase
           .firestore()
-          .collection("usuario")
+          .collection("usuarios")
           .doc(user.id)
           .update(user.data);
       } catch (error) {
