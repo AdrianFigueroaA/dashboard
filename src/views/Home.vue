@@ -21,7 +21,6 @@
         </a-button>
       </template>
       <div class="login">
-
         <a-input placeholder="Correo" v-model="email" />
         <a-input-password placeholder="Contraseña" v-model="password" />
 
@@ -35,7 +34,7 @@
 
     <div class="container">
       <div class="cards">
-        <a-row :gutter="10" type="flex" justify="center" >
+        <a-row :gutter="10" type="flex" justify="center">
           <a-col :span="8" v-for="(dum, i) in dataDum" :key="i">
             <a-card hoverable style="width: 240px">
               <img
@@ -49,8 +48,6 @@
                 <template slot="description">
                   <p>Fecha publicacion {{ dum.publishDate }}</p>
                   <p>likes {{ dum.likes }}</p>
-
-
                 </template>
               </a-card-meta>
             </a-card>
@@ -61,19 +58,26 @@
         <div id="piechart"></div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Footer from "../components/Footer.vue";
 import firebase from "firebase";
 export default {
   name: "Home",
+    components: {
+    Footer,
+  },
 
   data() {
     return {
       dataDum: [],
-      originalData:[],
+      originalData: [],
+      newLikes: 0,
+      likes: [],
       visible: false,
       showSuccessMessage: false,
       email: "",
@@ -107,6 +111,10 @@ export default {
         });
     },
 
+    sumaLikes(total, x) {
+      return total + x;
+    },
+
     async getDataDogs() {
       const APP_ID = "5ff76c95952b26f8147db9f6";
       const baseUrl = "https://dummyapi.io/data/api";
@@ -116,10 +124,19 @@ export default {
         .then((response) => {
           this.dataDum = response.data.data.splice(7);
           this.originalData = response.data.data;
+
+          this.originalData.forEach((x) => {
+            this.likes.push(x.likes);
+
+            
+          });
+
+          this.newLikes = this.likes.reduce(this.sumaLikes);
+          this.googleCharts( this.newLikes)
         })
         .catch(function(error) {
           console.log(error);
-        })
+        });
     },
 
     showModal() {
@@ -127,33 +144,34 @@ export default {
       this.showSuccessMessage = false;
     },
 
+    googleCharts(likes) {
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Task", "Hours per Day"],
+          ["likes", likes],
+          
+        ]);
+
+        var options = {
+          title: "Resumen Canino",
+          width: 400,
+          height: 350,
+        };
+
+        var chart = new google.visualization.PieChart(
+          document.getElementById("piechart")
+        );
+
+        chart.draw(data, options);
+      }
+    },
   },
 
   created() {
     this.getDataDogs();
-    google.charts.load("current", { packages: ["corechart"] });
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-      var data = google.visualization.arrayToDataTable([
-        ["Task", "Hours per Day"],
-        ["likes", 11],
-        ["raza", 2],
-
-      ]);
-
-      var options = {
-        title: "Resumen Canino",
-        width: 500,
-        height: 350,
-      };
-
-      var chart = new google.visualization.PieChart(
-        document.getElementById("piechart")
-      );
-
-      chart.draw(data, options);
-    }
   },
 };
 </script>
@@ -206,10 +224,9 @@ h3 {
   background: #3498db;
   margin: 20px 0 0 10px;
   padding: 20px 0;
-  
 }
 
 .ant-input {
-   margin: 10px 0 !important;
+  margin: 10px 0 !important;
 }
 </style>

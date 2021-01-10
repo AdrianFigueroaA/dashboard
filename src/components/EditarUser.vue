@@ -59,7 +59,7 @@ export default {
       setTimeout(() => {
         this.visible = false;
         this.loading = false;
-      }, 2000);
+      }, 1000);
     },
     handleCancel(e) {
       this.visible = false;

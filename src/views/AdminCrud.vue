@@ -13,6 +13,7 @@
     <div slot="action" slot-scope="text, user" > 
        <EditarUser :user="user" />
        <a-button  v-on:click.stop.prevent="borrar(user.id)"  >Borrar</a-button>
+       
 
        
     </div>
@@ -46,7 +47,7 @@ export default {
   newUsuarios: [],
       columns: [
         {
-          title:"nombre",
+          title:"Nombre",
           dataIndex: "nombre",
           key: "nombre",
           slots: { title: "nombre" },
@@ -123,6 +124,8 @@ this.Usuarios.map(x =>{
 }
 h1 {
   font-family: "Roboto", sans-serif;
+  color: white;
+  padding-top: 20px;
 }
 .buttonLogout {
   height: 45px;
