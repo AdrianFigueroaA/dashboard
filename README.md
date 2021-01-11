@@ -1,5 +1,8 @@
 # Dahsboard
 
+dashboard es un demo de una web con administracion de usuarios y login basado en los servicios de firebase desarrolado con vue js y ant desing.
+
+
 _Visita el Proyecto desde éste enlace:_
 
 
