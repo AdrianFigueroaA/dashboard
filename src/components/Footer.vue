@@ -1,11 +1,8 @@
 <template>
-  
       <div class="footer">
           <a href="https://github.com/AdrianFigueroaA">
             Desarrollado  por <span>Adrian Figueroa.</span></a>
-        </div>
-        
-
+      </div>
 </template>
 
 <script>
@@ -18,12 +15,15 @@ export default {
 <style lang="scss">
 
 .footer {
+    height: 100px;
+    background: black;
     display: flex;
     justify-content: center;
+    align-items: center;
     font-weight: bold;
     font-size: 20px;
       a {
-          color: black ;
+          color:white ;
           span {    
 
             color: #099745;

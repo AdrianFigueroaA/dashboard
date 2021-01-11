@@ -69,7 +69,7 @@ import firebase from "firebase";
 export default {
   name: "Home",
     components: {
-    Footer,
+    Footer
   },
 
   data() {
@@ -181,6 +181,7 @@ export default {
 
 .container {
   display: flex;
+  margin-bottom: 30px;
 }
 
 .buttonLogin {
